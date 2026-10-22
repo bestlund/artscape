@@ -1887,12 +1887,10 @@ export default class Player extends PathingEntity {
         }
 
         const multi = allowMulti ? Environment.node.xpRate : 1;
-        this.stats[stat] += xp * multi;
 
         // cap to 200m, this is represented as "2 billion" because we use 32-bit signed integers and divide by 10 to give us a decimal point
-        if (this.stats[stat] > 2_000_000_000) {
-            this.stats[stat] = 2_000_000_000;
-        }
+        // ArtScape: cap before storing; writing past 2^31 into the Int32Array wraps negative (::~maxme at xpRate 25 did)
+        this.stats[stat] = Math.min(this.stats[stat] + xp * multi, 2_000_000_000);
 
         const before = this.baseLevels[stat];
         if (this.levels[stat] === this.baseLevels[stat]) {

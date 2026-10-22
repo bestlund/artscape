@@ -1,0 +1,32 @@
+// ArtScape: command menu for the local admin account (::commands)
+// Lists only commands that work on this local world. Needs LOCAL_STAFF_USERS (engine .env).
+[debugproc,commands]
+if_close;
+if (p_finduid(uid) = true) {
+    switch_int(~p_choice5_header("My character", 1, "Items", 2, "Travel", 3, "World speed & watching agents", 4, "How commands work", 5, "ArtScape commands")) {
+        case 1 : @artscape_cmds_character;
+        case 2 : @artscape_cmds_items;
+        case 3 : @artscape_cmds_travel;
+        case 4 : @artscape_cmds_world;
+        case 5 : @artscape_cmds_howto;
+    }
+} else {
+    @please_finish;
+}
+
+[label,artscape_cmds_character]
+~mesbox("@blu@My character|@whi@::maxme@bla@ - all skills to 99|@whi@::minme@bla@ - all skills back to 1|@whi@::setstat mining 50@bla@ - set one skill to any level");
+
+[label,artscape_cmds_items]
+~mesbox("@blu@Items|@whi@::give coins 1000@bla@ - get any item, any amount|@whi@::give blue_partyhat@bla@ - use _ for spaces in names|@whi@::bank@bla@ - open your bank anywhere");
+
+[label,artscape_cmds_travel]
+~mesbox("@blu@Travel|@whi@::home@bla@ - Lumbridge|@whi@::varrock@bla@ - Varrock|@whi@::falador@bla@ - Falador|@whi@::draynor@bla@ - Draynor Village");
+~mesbox("@blu@Travel|@whi@::north 5@bla@ - 5 tiles north (also east, south, west)|@whi@::tele 0,49,50,59,20@bla@ - exact spot (here: Lumbridge trees)");
+
+[label,artscape_cmds_world]
+~mesbox("@blu@World speed & watching agents|@whi@::speed 200@bla@ - game runs 2x faster|@whi@::speed 400@bla@ - back to normal speed|@whi@::players@bla@ - how many are online");
+~mesbox("@blu@World speed & watching agents|@whi@::pos@bla@ - your exact position|@whi@::reboot@bla@ - save everyone and restart the server|Live map of everyone: localhost:8888/mapview|Speed goes back to normal when the server restarts.");
+
+[label,artscape_cmds_howto]
+~mesbox("@blu@How commands work|Type a command in the chat box and press Enter.|Names are lowercase, with _ for spaces: blue_partyhat|Open this menu again with ::commands");

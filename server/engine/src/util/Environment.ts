@@ -61,5 +61,7 @@ export default {
     // Clients must send activity (the viewer sends a ping every 30s) to keep their slot.
     WORLD_FEED_IDLE_TIMEOUT_MS: tryParseInt(process.env.WORLD_FEED_IDLE_TIMEOUT_MS, 120_000),
     HISCORES_HIDDEN_NAMES: (process.env.HISCORES_HIDDEN_NAMES || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean),
-    BANNED_USERNAME_WORDS: (process.env.BANNED_USERNAME_WORDS || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean)
+    BANNED_USERNAME_WORDS: (process.env.BANNED_USERNAME_WORDS || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean),
+    // ArtScape: usernames granted dev staffmodlevel (::tele, ::give, ::~maxme) on worlds without a login server
+    LOCAL_STAFF_USERS: (process.env.LOCAL_STAFF_USERS || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean)
 };

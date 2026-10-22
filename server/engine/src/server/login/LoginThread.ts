@@ -57,7 +57,8 @@ async function handleRequests(parentPort: ParentPort, msg: any) {
                 stopTimer();
             } else {
                 // rs-sdk: do not auto-grant dev staffmodlevel on non-production worlds (public server)
-                const staffmodlevel = 0;
+                // ArtScape: except for usernames listed in LOCAL_STAFF_USERS
+                const staffmodlevel = Environment.LOCAL_STAFF_USERS.includes(username) ? 4 : 0;
 
                 const profile = Environment.node.profile;
                 if (!fs.existsSync(`data/players/${profile}`)) {

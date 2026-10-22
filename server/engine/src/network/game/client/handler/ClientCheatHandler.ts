@@ -57,9 +57,13 @@ export default class ClientCheatHandler extends ClientGameMessageHandler<ClientC
         if (!Environment.node.production && player.staffModLevel >= 4) {
             // developer commands
 
-            if (cmd[0] === Environment.node.debugProcChar) {
+            // ArtScape: debugprocs also run without the ~ (::maxme works like ::~maxme). Engine commands keep
+            // their name; 'random' is the only engine command that is also a debugproc.
+            const hasProcChar = cmd[0] === Environment.node.debugProcChar;
+            const procName = hasProcChar ? cmd.slice(1) : cmd;
+            if (hasProcChar || (cmd !== 'random' && ScriptProvider.getByName(`[debugproc,${procName}]`))) {
                 // debugprocs are NOT allowed on live ;)
-                const script = ScriptProvider.getByName(`[debugproc,${cmd.slice(1)}]`);
+                const script = ScriptProvider.getByName(`[debugproc,${procName}]`);
                 if (!script) {
                     return false;
                 }
@@ -409,8 +413,9 @@ export default class ClientCheatHandler extends ClientGameMessageHandler<ClientC
                 }
 
                 World.broadcastMes(cheat.substring(cmd.length + 1));
-            } else if (cmd === 'reboot' && Environment.node.production) {
+            } else if (cmd === 'reboot') {
                 // semi-authentic - we actually just shut down for maintenance
+                // ArtScape: allowed on the local world too; a restart loop starts the engine again
 
                 // Reboots the game world, applying packed changes
                 World.rebootTimer(0);
