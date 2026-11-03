@@ -1,5 +1,5 @@
 // First script for testbot1: skip the tutorial, walk to the trees near Lumbridge, chop one.
-// Run from the rs-sdk folder:  bun bots/testbot1/first.ts
+// Run from the rs-sdk folder:  bun artscape/first.ts testbot1   (any bot name works)
 // Needs the engine, the gateway and testbot1's game client running.
 
 import { runScript } from '../sdk/runner';

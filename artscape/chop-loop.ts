@@ -1,5 +1,5 @@
 // Version 2 for testbot1: chop until the backpack is full, drop the logs, repeat.
-// Run from the rs-sdk folder:  bun bots/testbot1/chop-loop.ts
+// Run from the rs-sdk folder:  bun artscape/chop-loop.ts testbot1   (any bot name works)
 // Needs the engine, the gateway and testbot1's game client running.
 
 import { runScript } from '../sdk/runner';
