@@ -28,7 +28,7 @@ Decided 2026-11-03 (replaces the `agents/` plan from 2026-10-22). Moved out of O
 
 - The repo is our fork https://github.com/bestlund/artscape (branch `artscape`), cloned to `C:\dev\ArtScape`. That folder is the repo root. Older notes call it `rs-sdk/`, so `rs-sdk/artscape/` in old notes means `artscape/` here.
 - All our code lives in `artscape/`. Logger, routines, agent loop and run controller go there.
-- Our docs live in `artscape/docs/`: this file, `DEVLOG.md`, `SPRINT-1.md`, `sessions/` and `logger/DESIGN.md`. The repo root `CLAUDE.md` is rs-sdk's bot guide; its first line imports this file.
+- Our docs live in `artscape/docs/`: this file, `agents.md` (prototype agent spec), `DEVLOG.md`, `SPRINT-1.md` (paused), `sessions/`, `logger/DESIGN.md`, `report-notes.md` (method notes for the paper) and `references.md` (reading list). The repo root `CLAUDE.md` is rs-sdk's bot guide; its first line imports this file.
 - **The fork is public.** Never put keys, passwords, `bot.env` contents or private notes into docs or code. Secrets go in gitignored `.env` files.
 - Run scripts from the repo root with the bot name, e.g. `bun artscape/chop-loop.ts testbot1`. The runner finds `bots/<name>/bot.env` itself.
 - `bots/` only holds `bot.env` files (gitignored). Engine changes outside `artscape/` are kept small and listed in `DEVLOG.md`.
@@ -61,13 +61,34 @@ bun bots/<name>/script.ts
 
 Game speed: `NODE_TICKRATE` in `server/engine/.env` (default 400 ms), or `::speed <ms>` in-game.
 
+## Documentation
+
+Agreed on 2026-11-19. Claude Code follows these without being asked.
+
+- **One thing at a time.** After each task, stop and report to Jacob. Start the next task only after his OK.
+- **Log every move and decision** in that day's session log, `artscape/docs/sessions/YYYY-MM-DD.md`, as the work happens: in order, with the time and who decided. Re-read the file from disk right before editing it, and edit it in place (Claude in chat edits it too).
+- **Technical problems and fixes** also go in `DEVLOG.md`.
+- **Commit after each task**, so git keeps a timestamped trail.
+- **Claude in chat** (claude.ai) plans with Jacob. It reads the session log, the git history and the code directly, and writes agreed plans into `artscape/docs/`. Jacob doesn't copy anything between the two Claudes.
+- **The fork is public.** The OpenRouter key goes in `API_KEYS.env` (gitignored), never in docs, logs or commits.
+
 ## Agent design
 
-The full design is on the Miro board "ArtScape" (frames 1–6). Build list: `SPRINT-1.md`, **paused on 2026-11-19**. The current plan (thin vertical slice for the 23 Nov prototype) is in `sessions/2026-11-19.md`.
+**Prototype (until 23 Nov 2026): follow `agents.md`** (agent spec v1, approved by Jacob on 2026-11-19 at 17:14). Where it differs from the full design below, `agents.md` wins. The main changes:
 
-- Four agents: **Miner A, Miner B, Smith, Merchant.** Built up one at a time.
-- Economy: miners sell ore to the smith, the smith sells items to the merchant, the merchant sells to an NPC buyer. Coins enter only at the NPC buyer and leave only at the NPC gear shop (pickaxes, fixed steps). The smith cannot sell to the NPC buyer.
-- Goals: a race. The first agent to reach the target (placeholder: 10,000 coins) wins. Miners also want the best pickaxe, the smith wants to be known as the most reliable smith, the merchant wants to be the village banker.
+- **Three AI agents:** Miner A (`minera`), Miner B (`minerb`) and the Smith (`smith`). Identities are facts, not traits (no personality), and Miner A and B are identical except for their name.
+- **The Smith sells bronze daggers to a General Store NPC**, a custom shop with a fixed price (70 coins (P)). It is the only coin source, since there is no merchant yet.
+- **Everyone starts with 300 coins (P).** Target: 5,000 coins (P).
+- **Trust ratings happen in a rating step at the end of each day, in both conditions**, not after each deal.
+- **Mini-IPIP questionnaire (Big Five) at the start and end of each run**, as a separate call, not part of BDI, with no reward.
+- Every belief in a decision has a `source` (seen, told, remembered, guessed).
+- **Parked until after 23 Nov:** the merchant, the NPC gear shop, and the secondary goals (best pickaxe, most reliable smith, village banker).
+
+The full design is on the Miro board "ArtScape" (frames 1–6; frame 7 shows the prototype agents and frame 8 what changed on 19 Nov). Build list: `SPRINT-1.md`, **paused on 2026-11-19**. The current plan (thin vertical slice for the 23 Nov prototype) is in `sessions/2026-11-19.md`.
+
+- Four agents: **Miner A, Miner B, Smith, Merchant.** Built up one at a time. *(Prototype: the merchant is parked.)*
+- Economy: miners sell ore to the smith, the smith sells items to the merchant, the merchant sells to an NPC buyer. Coins enter only at the NPC buyer and leave only at the NPC gear shop (pickaxes, fixed steps). The smith cannot sell to the NPC buyer. *(Prototype: the Smith sells to the General Store; the gear shop is parked.)*
+- Goals: a race. The first agent to reach the target (placeholder: 10,000 coins) wins. Miners also want the best pickaxe, the smith wants to be known as the most reliable smith, the merchant wants to be the village banker. *(Prototype: target 5,000 (P); the secondary goals are parked.)*
 - Information: no public scoreboard. Progress is only known by asking in chat, and answers can be lies.
 - Identity (role, personality, goals, toolkit, rules) is part of every model call.
 - Each role has its own toolkit, the same in both conditions.
@@ -78,7 +99,7 @@ The full design is on the Miro board "ArtScape" (frames 1–6). Build list: `SPR
 - The model is called only at checkpoints (backpack full, routine done or failed, X minutes passed) and for message replies, never every tick. Code loops do the routine work.
 - Messages are handled in parallel while the routine runs. A reply (short BDI) can answer, ignore or flag the message for the next checkpoint; it can never agree to a deal. Reply limit per hour.
 - Memory is switched on or off per run, with a single flag that changes nothing else. Both conditions remember the current day. Memory on adds a diary between days (written by a reflection step at day end) and the agent's own past trust ratings.
-- After every deal, both agents rate their partner 1–7 with a reason, as part of the next decision's beliefs.
+- After every deal, both agents rate their partner 1–7 with a reason, as part of the next decision's beliefs. *(Prototype: replaced by the end-of-day rating step in both conditions; see `agents.md` section 7.)*
 
 ## Deals
 
