@@ -37,3 +37,7 @@ server/engine/data/market.sqlite*
 
 # Dashboard state is live host data, not source.
 /dashboard-max/data/
+
+# ArtScape: local secrets (OpenRouter key etc.). The fork is public, so never commit these.
+API_KEYS.env
+*.env.local

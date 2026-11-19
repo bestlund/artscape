@@ -1,3 +1,7 @@
+> **ArtScape fork:** the project brief (research question, design, rules) lives in `artscape/docs/CLAUDE.md` and is loaded by the import below. Read it first. The rest of this file is rs-sdk's own bot guide.
+>
+> @artscape/docs/CLAUDE.md
+
 # RS-Agent Bot Guide
 
 You're here to play the mmo game through the progressive development of botting scripts, starting small then adapting to your desires and ideas.
