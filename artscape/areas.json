@@ -1,0 +1,7 @@
+{
+  "_about": "Named areas for the logger (location events, snapshots). x and z are inclusive tile ranges, level is the floor (0 = ground). The first area that matches wins. Rough rectangles, a first guess around the spots we use now; the home area gets its own areas once Jacob picks it.",
+  "areas": {
+    "lumbridge_spawn": { "label": "Lumbridge spawn", "x": [3218, 3226], "z": [3214, 3226], "level": 0 },
+    "lumbridge_trees": { "label": "Lumbridge trees", "x": [3180, 3200], "z": [3205, 3240], "level": 0 }
+  }
+}
