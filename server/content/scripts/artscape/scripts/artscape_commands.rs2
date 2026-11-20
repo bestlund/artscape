@@ -27,6 +27,7 @@ if (p_finduid(uid) = true) {
 [label,artscape_cmds_world]
 ~mesbox("@blu@World speed & watching agents|@whi@::speed 200@bla@ - game runs 2x faster|@whi@::speed 400@bla@ - back to normal speed|@whi@::players@bla@ - how many are online");
 ~mesbox("@blu@World speed & watching agents|@whi@::pos@bla@ - your exact position|@whi@::reboot@bla@ - save everyone and restart the server|Live map of everyone: localhost:8888/mapview|Speed goes back to normal when the server restarts.");
+~mesbox("@blu@Updating the world|@whi@::rebuild@bla@ - load edited content files, no restart|Content files no longer reload by themselves.|After ::rebuild, check the console for errors.");
 
 [label,artscape_cmds_howto]
 ~mesbox("@blu@How commands work|Type a command in the chat box and press Enter.|Names are lowercase, with _ for spaces: blue_partyhat|Open this menu again with ::commands");

@@ -111,15 +111,19 @@ if (parentPort) {
     });
 }
 
-trackDir(`${Environment.build.srcDir}/maps`);
-trackDir(`${Environment.build.srcDir}/songs`);
-trackDir(`${Environment.build.srcDir}/jingles`);
-trackDir(`${Environment.build.srcDir}/binary`);
-trackDir(`${Environment.build.srcDir}/fonts`);
-trackDir(`${Environment.build.srcDir}/title`);
-trackDir(`${Environment.build.srcDir}/scripts`);
-trackDir(`${Environment.build.srcDir}/sprites`);
-trackDir(`${Environment.build.srcDir}/models`);
-trackDir(`${Environment.build.srcDir}/textures`);
-trackDir(`${Environment.build.srcDir}/synth`);
-trackDir(`${Environment.build.srcDir}/wordenc`);
+// ArtScape: watch the content files only when live reload is on (BUILD_LIVE_RELOAD).
+// With it off, this thread still runs, so a staff ::rebuild can repack and reload on demand.
+if (Environment.build.liveReload) {
+    trackDir(`${Environment.build.srcDir}/maps`);
+    trackDir(`${Environment.build.srcDir}/songs`);
+    trackDir(`${Environment.build.srcDir}/jingles`);
+    trackDir(`${Environment.build.srcDir}/binary`);
+    trackDir(`${Environment.build.srcDir}/fonts`);
+    trackDir(`${Environment.build.srcDir}/title`);
+    trackDir(`${Environment.build.srcDir}/scripts`);
+    trackDir(`${Environment.build.srcDir}/sprites`);
+    trackDir(`${Environment.build.srcDir}/models`);
+    trackDir(`${Environment.build.srcDir}/textures`);
+    trackDir(`${Environment.build.srcDir}/synth`);
+    trackDir(`${Environment.build.srcDir}/wordenc`);
+}

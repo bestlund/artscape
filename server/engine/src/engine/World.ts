@@ -357,10 +357,12 @@ class World {
             });
         }, 2000);
 
-        if (!Environment.node.production && Environment.build.liveReload) {
+        // ArtScape: start the dev thread on every local world, so a staff ::rebuild works even
+        // with live reload off. The thread only watches files when live reload is on (DevThread.ts).
+        if (!Environment.node.production) {
             this.createDevThread();
 
-            if (Environment.build.startup) {
+            if (Environment.build.liveReload && Environment.build.startup) {
                 this.rebuild();
             }
         }
